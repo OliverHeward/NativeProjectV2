@@ -16,7 +16,7 @@ const store = configureStore();
 Navigation.registerComponent("NativeProject.AuthScreen", () => AuthScreen, store, Provider);
 Navigation.registerComponent("NativeProject.SharePlaceScreen", () => SharePlaceScreen, store, Provider);
 Navigation.registerComponent("NativeProject.FindPlaceScreen", () => FindPlaceScreen, store, Provider);
-Navigation.registerComponent("NativeProject.PlaceDetailScreen", () => PlaceDetailScreen)
+Navigation.registerComponent("NativeProject.PlaceDetailScreen", () => PlaceDetailScreen, store, Provider);
 
 // Start The App
 
