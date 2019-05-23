@@ -18,7 +18,8 @@ const styles = StyleSheet.create({
     container: {
         paddingTop: 55,
         paddingLeft: 10,
-        backgroundColor: "white"
+        backgroundColor: "white",
+        flex: 1
     }
 })
 
