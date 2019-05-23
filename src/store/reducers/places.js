@@ -24,7 +24,7 @@ import {
         return {
           ...state,
           places: state.places.filter(place => {
-            return place.key !== action.placeKey;
+            return place.key !== state.selectedPlace.key;
           })
         };
         default:

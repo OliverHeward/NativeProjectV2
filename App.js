@@ -4,6 +4,7 @@ import { Provider } from "react-redux";
 import AuthScreen from "./src/screens/Auth/Auth";
 import SharePlaceScreen from "./src/screens/SharePlace/SharePlace";
 import FindPlaceScreen from "./src/screens/FindPlace/FindPlace";
+import PlaceDetailScreen from "./src/screens/PlaceDetail/PlaceDetail";
 import configureStore from "./src/store/configureStore";
 
 // Redux Store fired
@@ -15,6 +16,7 @@ const store = configureStore();
 Navigation.registerComponent("NativeProject.AuthScreen", () => AuthScreen, store, Provider);
 Navigation.registerComponent("NativeProject.SharePlaceScreen", () => SharePlaceScreen, store, Provider);
 Navigation.registerComponent("NativeProject.FindPlaceScreen", () => FindPlaceScreen, store, Provider);
+Navigation.registerComponent("NativeProject.PlaceDetailScreen", () => PlaceDetailScreen)
 
 // Start The App
 

@@ -10,7 +10,7 @@ class SharePlaceScreen extends Component {
     // placeAddedHandler method getting the placeName.
     // this.props.onPlaceAdded(placename) added from the prop in mapToDispatch
     placeAddedHandler = placeName => {
-        this.props.onPlaceAdded(placeName);
+        this.props.onAddPlace(placeName);
     }
 
     render () {
