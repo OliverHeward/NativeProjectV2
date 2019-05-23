@@ -7,6 +7,25 @@ import PlaceList from "../../components/PlaceList/PlaceList";
 // Importing Placelist
 
 class FindPlaceScreen extends Component {
+    constructor(props) {
+        super(props);
+        // setting the navigator to open by passing onNavigatorEvent function into navigator props
+        this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent);
+    }
+
+    onNavigatorEvent = event => {
+        // Checking event.type is equal to the ID given to navbar
+        if (event.type === "NavBarButtonPress") {
+            // If the event.id is equal to the ID given on startMainTabs
+            if (event.id === "sideDrawerToggle") {
+                // if true, then reach out to navigator and toggle draw
+                this.props.navigator.toggleDrawer({
+                    side: "left"
+                });
+            }
+        }
+    }
+
     itemSelectedHandler = key => {
         // Vari selPlace is defined by mapStateToProps places:state with find()
         // it will return true if the place.key if EQUAL to key recieved

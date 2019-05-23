@@ -7,6 +7,25 @@ import PlaceInput from '../../components/PlaceInput/PlaceInput';
 import { addPlace } from '../../store/actions/index';
 
 class SharePlaceScreen extends Component {
+    constructor(props) {
+        super(props);
+        // setting the navigator to open by passing onNavigatorEvent function into navigator props
+        this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent);
+    }
+
+    onNavigatorEvent = event => {
+        // Checking event.type is equal to the ID given to navbar
+        if (event.type === "NavBarButtonPress") {
+            // If the event.id is equal to the ID given on startMainTabs
+            if (event.id === "sideDrawerToggle") {
+                // if true, then reach out to navigator and toggle draw
+                this.props.navigator.toggleDrawer({
+                    side: "left"
+                });
+            }
+        }
+    }
+
     // placeAddedHandler method getting the placeName.
     // this.props.onPlaceAdded(placename) added from the prop in mapToDispatch
     placeAddedHandler = placeName => {
