@@ -21,7 +21,7 @@ class AuthScreen extends Component {
                 style={styles.backgroundImage}>
                 <View style={styles.container} >
                 <MainText>
-                    <HeadingText>Please Log In</HeadingText>
+                    <HeadingText style={styles.headingText}>Please Log In</HeadingText>
                 </MainText>
                 <ButtonWithBackground >Switch To Login</ButtonWithBackground>
                 <View style={styles.inputContainer}>
@@ -53,6 +53,10 @@ const styles = StyleSheet.create({
         backgroundColor: "#eee",
         borderColor: "#bbb",
     },
+    headingText: {
+        marginTop: 5,
+        marginBottom: 5
+    }
 });
 
 export default AuthScreen;
