@@ -1,16 +1,23 @@
 import React, { Component } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, ScrollView, Image } from 'react-native';
+// Importing Redux
 import { connect } from 'react-redux';
-// Import Redux connect
+// Importing action Index
 import { addPlace } from '../../store/actions/index';
+// Importing PlaceInput
 import PlaceInput from '../../components/PlaceInput/PlaceInput';
+// Importing Text wrapper and Header text components
 import MainText from '../../components/UI/MainText/MainText';
 import HeadingText from '../../components/UI/HeadingText/HeadingText';
+// Importing PickImage and PickLocation components
 import PickImage from '../../components/PickImage/PickImage';
 import PickLocation from '../../components/PickLocation/PickLocation';
+
+// Importing Image
 import imagePlaceholder from '../../assets/unsplash.jpg';
 
 class SharePlaceScreen extends Component {
+    // setting state to an empty string
     state = {
         placeName: ""
     };

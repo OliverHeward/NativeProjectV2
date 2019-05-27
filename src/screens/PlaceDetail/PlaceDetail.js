@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Image, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Image, Text, Button, StyleSheet, TouchableOpacity, Platform } from 'react-native';
 import { connect } from 'react-redux';
 
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -23,7 +23,11 @@ class PlaceDetail extends Component {
                 {/* placeDeletedHandler function passed into onPress listener */}
                 <TouchableOpacity onPress={this.placeDeletedHandler}>
                     <View style={styles.deleteButton}>
-                        <Icon size={30} name="ios-trash" color="red" />
+                        <Icon 
+                        size={30} 
+                        // Platform checking for device to change icon styling accordingly
+                        name={Platform.OS === 'android' ? "md-trash" : "ios-trash"}
+                        color="red" />
                     </View>
                 </TouchableOpacity>
             </View>
@@ -50,9 +54,14 @@ const styles = StyleSheet.create({
     }
 });
 
+// Mapping item to Redux dispatch
 const mapDispatchToProps = dispatch => {
+    // mapping dispatch allows for the passing of state key to store
     return {
         onDeletePlace: (key) => dispatch(deletePlace(key))
+        // the action onDeletePlace is returned, key is being imported from Placedetail state
+        // the state is then dispatched the result of onDeletePlace
+        // this is then sent to the store to be deleted
     };
 };
 

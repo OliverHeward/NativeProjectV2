@@ -1,5 +1,6 @@
 import { ADD_PLACE, DELETE_PLACE } from './actionTypes';
 
+// Running placeName through addplace function
 export const addPlace = (placeName) => {
     return {
         type: ADD_PLACE,
@@ -7,6 +8,7 @@ export const addPlace = (placeName) => {
     };
 };
 
+// Running key through deletePlace function
 export const deletePlace = (key) => {
     return {
         type: DELETE_PLACE,

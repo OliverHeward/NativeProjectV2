@@ -1,13 +1,15 @@
 import { Navigation } from 'react-native-navigation';
+import { Platform } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 
 const startTabs = () => {
     // Promise waits for Icon's to be loaded/resolved, a .then is used which will turn them into an array.
     Promise.all([
-        Icon.getImageSource("md-map", 30),
-        Icon.getImageSource("share", 30),
-        Icon.getImageSource("ios-menu", 30)
+        // The promise has Platform library checking for device and displaying different styled icons
+        Icon.getImageSource(Platform.OS === 'android' ? "md-map" : "ios-map", 30),
+        Icon.getImageSource(Platform.OS === 'android' ? "md-share-alt" : "ios-share-alt", 30),
+        Icon.getImageSource(Platform.OS === 'android' ? "md-menu" : "ios-menu", 30)
     ]).then(sources => {
         // sources relates to a naming convension for image source
         Navigation.startTabBasedApp({
