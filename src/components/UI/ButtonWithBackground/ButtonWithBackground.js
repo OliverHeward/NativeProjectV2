@@ -10,7 +10,7 @@ const buttonWithBackground = props => {
     // variable storing content of Button Preset
     const content = (
         <View style={[styles.button, {backgroundColor: props.color}]}>
-            <Text>
+            <Text style={styles.buttonText}>
                 {props.children}
             </Text>
         </View>
@@ -31,8 +31,11 @@ const styles = StyleSheet.create({
         padding: 10,
         margin: 5,
         borderRadius: 5,
-        borderWidth: 1,
-        borderColor: "black"
+        borderWidth: 2,
+        borderColor: "black",
+    },
+    buttonText: {
+        fontWeight: "bold",
     }
 });
 

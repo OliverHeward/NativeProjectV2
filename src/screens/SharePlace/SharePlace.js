@@ -17,6 +17,9 @@ import PickLocation from '../../components/PickLocation/PickLocation';
 import imagePlaceholder from '../../assets/unsplash.jpg';
 
 class SharePlaceScreen extends Component {
+    static navigatorStyle = {
+        navBarButtonColor: "orange"
+    }
     // setting state to an empty string
     state = {
         placeName: ""

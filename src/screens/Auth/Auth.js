@@ -17,17 +17,23 @@ class AuthScreen extends Component {
 
     constructor(props) {
         super(props);
-        /* Dimensions API event listener to "change" in Dimension.
-            The original state is set to either Portrait or Landscape on inital loading of screen
-            When there is a change the viewMode will be updated with 
-                if > 500 = "portrait"
-                else < 500 = "landscape"
-        */
-        Dimensions.addEventListener("change", dims => {
-            this.setState({
-                viewMode: Dimensions.get('window').height > 500 ? "portrait" : "landscape"
+        // Dimensions API event listener to "change" in updateStyles
+        Dimensions.addEventListener("change", this.updateStyles);
+        }
+
+    componentWillUnmount() {
+        // When Dimenions mounts, then remove event listener
+        Dimensions.removeEventListener("change", this.updateStyles);
+    }
+
+    // 
+    updateStyles = (dims) => {
+        this.setState({
+                viewMode: 
+                    // dimensions window "height" > 500 select portrait
+                    // other wise < 500 select landscape
+                    dims.window.height > 500 ? "portrait" : "landscape"
             })
-        });
     }
 
     loginHandler = () => {

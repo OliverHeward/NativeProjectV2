@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Animated } from 'react-native';
 import { connect } from 'react-redux';
 // importing redux connect
 
@@ -7,6 +7,18 @@ import PlaceList from "../../components/PlaceList/PlaceList";
 // Importing Placelist
 
 class FindPlaceScreen extends Component {
+    // a static state color is set for navbar to orange
+    static navigatorStyle = {
+        navBarButtonColor: "orange"
+    }
+    // Internal placesLoaded state set to false
+    // Animation state component values
+    state = {
+        placesLoaded: false,
+        removeAnim: new Animated.Value(1),
+        placesAnim: new Animated.Value(0)
+    }
+
     constructor(props) {
         super(props);
         // setting the navigator to open by passing onNavigatorEvent function into navigator props
@@ -24,6 +36,40 @@ class FindPlaceScreen extends Component {
                 });
             }
         }
+    }
+    /* Place List animation handler setting animation settings,
+        to Value 1 from 0 (in state => placesAnim)
+        duration: 500ms,
+        use Native Drivers to help animation assist smoothing
+            start() animation.
+
+    */
+
+    placesLoadedHandler = () => {
+        Animated.timing(this.state.placesAnim, {
+            toValue: 1,
+            duration: 500,
+            useNativeDriver: true
+        }).start();
+    }
+    /* Search button handler setting animation settings,
+        toValue 0 from 1 (in state),
+        duration: 500ms,
+        use Native Drivers to help animation assist smoothing
+            start is called to setState of placesLoaded to True
+                then sends initiation to placesLoadedHandler
+    */
+    placesSearchHandler = () => {
+        Animated.timing(this.state.removeAnim, {
+            toValue: 0,
+            duration: 500,
+            useNativeDriver: true
+        }).start(() => {
+            this.setState({
+                placesLoaded: true
+            })
+            this.placesLoadedHandler();
+        }); // Start the animation
     }
 
     itemSelectedHandler = key => {
@@ -43,14 +89,75 @@ class FindPlaceScreen extends Component {
         });
     }
     render () {
+        let content = (
+            <Animated.View
+                style={{
+                    // this is NaN, Animated view understands this only
+                    opacity: this.state.removeAnim,
+                    transform: [
+                        {
+                            scale: this.state.removeAnim.interpolate({
+                                inputRange: [0, 1],
+                                outputRange: [12, 1]
+                            })
+                        }
+                    ]
+                }}
+                >
+                <TouchableOpacity onPress={this.placesSearchHandler}>
+                    <View style={styles.searchButton}>
+                        <Text style={styles.searchButtonText}>Find Places</Text>
+                    </View>
+                </TouchableOpacity>
+            </Animated.View>
+        );
+        if (this.state.placesLoaded) {
+            content = (
+                /* Pulling in Data value props.places from Flatlist(PlaceList) */
+                // Animated View to fade in List
+                <Animated.View style={{ 
+                    opacity: this.state.placesAnim,
+                    width: "100%",
+                    flex: 1,
+                }}>
+                    
+                    <PlaceList 
+                        places={this.props.places} 
+                        onItemSelected={this.itemSelectedHandler} 
+                />
+                </Animated.View>
+            );
+        }
         return(
-            <View>
-                {/* Pulling in Data value props.places from Flatlist(PlaceList) */}
-                <PlaceList places={this.props.places} onItemSelected={this.itemSelectedHandler} />
+            <View style={
+                this.state.placeLoaded 
+                ? styles.listLoaded
+                : styles.buttonContainer}>
+            {content}
             </View>
         );
     }
 }
+
+const styles = StyleSheet.create({
+    buttonContainer: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        width: "100%"
+    },
+    searchButton: {
+        borderColor: "orange",
+        borderWidth: 3,
+        borderRadius: 50,
+        padding: 20,
+    },
+    searchButtonText: {
+        color: "orange",
+        fontWeight: "bold",
+        fontSize: 26
+    }
+});
 
 const mapStateToProps = state => {
     return {

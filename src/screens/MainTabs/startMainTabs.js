@@ -48,11 +48,17 @@ const startTabs = () => {
                     // Source being called for icon 2
                 }
             ],
+            tabsStyle: {
+                tabBarSelectedButtonColor: "orange"
+            },
             drawer: {
                 left: {
                     screen: "NativeProject.SideDrawer",
 
                 }
+            },
+            appStyle: {
+                tabBarSelectedButtonColor: "orange"
             }
         });
     })
