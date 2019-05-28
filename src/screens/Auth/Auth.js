@@ -20,21 +20,24 @@ class AuthScreen extends Component {
                 valid: false,
                 validationRules: {
                     isEmail: true
-                }
+                },
+                touched: false
             },
             password: {
                 value: "",
                 valid: false,
                 validationRules: {
                     minLength: 6
-                }
+                },
+                touched: false
             },
             confirmPassword: {
                 value: "",
                 valid: false,
                 validationRules: {
                     equalTo: 'password'
-                }
+                },
+                touched: false
             }
         }
     }
@@ -108,8 +111,13 @@ class AuthScreen extends Component {
                     [key]: {
                         ...prevState.controls[key],
                         value: value,
-                        valid: validate(value, prevState.controls[key].validationRules, connectedValue)
-                    },
+                        valid: validate(
+                            value, 
+                            prevState.controls[key].validationRules, 
+                            connectedValue
+                            ),
+                        touched: true
+                    }
                 }
             };
         });
@@ -144,12 +152,19 @@ class AuthScreen extends Component {
                         onChangeText listening for any change in the input,
                             When there is val is ran into function updateInputState
                             which will update state of 'email' value
+                        
+                            valid is a validity check for the input, along with touched.
+                            If the field is invalid when checked against Regex
+                            it will style to be RED
                     */}
                     <DefaultInput 
                         placeholder="Your E-Mail Address" 
                         style={styles.input} 
                         value={this.state.controls.email.value}
-                        onChangeText={(val) => this.updateInputState('email', val)} />
+                        onChangeText={(val) => this.updateInputState('email', val)} 
+                        valid={this.state.controls.email.valid}
+                        touched={this.state.controls.email.touched}
+                        />
                     {/* State being set for styling to Dimensions of screen */}
                     <View style={
                         this.state.viewMode === "portrait" 
@@ -161,11 +176,18 @@ class AuthScreen extends Component {
                             ? styles.portraitPasswordWrapper 
                             : styles.landscapePasswordWrapper
                             }>
+                                {/* Valid & Touched are used for validity to apply styling
+                                        if the field is incorrect it will appear RED
+                                        the validity check is from Password === ConfirmPassword,
+                                        if FALSE the ConfirmPassword field will appear RED until TRUE    
+                                */}
                             <DefaultInput 
                                 placeholder="Password" 
                                 style={styles.input} 
                                 value={this.state.controls.password.value}
-                                onChangeText={(val) => this.updateInputState('password', val)}/>
+                                onChangeText={(val) => this.updateInputState('password', val)}
+                                valid={this.state.controls.password.valid}
+                                touched={this.state.controls.password.touched} />
                         </View>
                         <View style={
                             this.state.viewMode === "portrait" 
@@ -177,11 +199,23 @@ class AuthScreen extends Component {
                                 style={styles.input}
                                 value={this.state.controls.confirmPassword.value}
                                 onChangeText={(val) => this.updateInputState('confirmPassword', val)}
+                                valid={this.state.controls.confirmPassword.valid}
+                                touched={this.state.controls.confirmPassword.touched}
                              />
                         </View>
                     </View>
                 </View>
-                <ButtonWithBackground onPress={this.loginHandler}>Submit</ButtonWithBackground>
+                {/* disabled is passed through, to check whether the validity of all fields is true
+                    ! = NOT, so if each state is NOT .valid, it will set itself to Disabled
+                        which takes away the Touchable component from ButtonWithBackground.js (UI)
+                */}
+                <ButtonWithBackground 
+                    onPress={this.loginHandler}
+                    disabled={
+                        !this.state.controls.confirmPassword.valid || 
+                        !this.state.controls.email.valid || 
+                        !this.state.controls.password.valid}
+                        >Submit</ButtonWithBackground>
             </View>
             </ImageBackground>
         );

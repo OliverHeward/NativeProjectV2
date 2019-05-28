@@ -9,12 +9,21 @@ import { TouchableOpacity,
 const buttonWithBackground = props => {
     // variable storing content of Button Preset
     const content = (
-        <View style={[styles.button, {backgroundColor: props.color}]}>
-            <Text style={styles.buttonText}>
+        <View style={[
+            styles.button, 
+            {backgroundColor: props.color}, 
+            props.disabled ? styles.disabled : null
+            // if props.disabled = true, add disabled style. Else 'null'
+            ]}>
+            <Text style={props.disabled ? styles.disabledText : null}>
                 {props.children}
             </Text>
         </View>
     );
+    // If the property of button is set to disabled, display View without Touchable component
+    if (props.disabled) {
+        return content;
+    }
     // Platform API condition check to output according Touchable Effect
     if(Platform.OS === "android") {
         return(
@@ -36,6 +45,12 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         fontWeight: "bold",
+    },
+    disabled: {
+        backgroundColor: "#eee",
+    },
+    disabledText: {
+        color: "#aaa"
     }
 });
 
