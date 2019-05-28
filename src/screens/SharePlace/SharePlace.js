@@ -12,9 +12,9 @@ import HeadingText from '../../components/UI/HeadingText/HeadingText';
 // Importing PickImage and PickLocation components
 import PickImage from '../../components/PickImage/PickImage';
 import PickLocation from '../../components/PickLocation/PickLocation';
-
+import validate from '../../utility/validation';
 // Importing Image
-import imagePlaceholder from '../../assets/unsplash.jpg';
+import imagePlaceholder from '../../assets/wework-office.jpg';
 
 class SharePlaceScreen extends Component {
     static navigatorStyle = {
@@ -22,14 +22,23 @@ class SharePlaceScreen extends Component {
     }
     // setting state to an empty string
     state = {
-        placeName: ""
-    };
+        controls: {
+          placeName: {
+            value: "",
+            valid: false,
+            touched: false,
+            validationRules: {
+              notEmpty: true
+            }
+          }
+        }
+      };
 
     constructor(props) {
         super(props);
         // setting the navigator to open by passing onNavigatorEvent function into navigator props
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent);
-    }
+    };
 
     onNavigatorEvent = event => {
         // Checking event.type is equal to the ID given to navbar
@@ -45,17 +54,27 @@ class SharePlaceScreen extends Component {
     };
     // Setting state of PlaceInput
     placeNameChangedHandler = val => {
-        this.setState({
-            placeName: val
-        })
-    }
+        this.setState(prevState => {
+          return {
+            controls: {
+              ...prevState.controls,
+              placeName: {
+                ...prevState.controls.placeName,
+                value: val,
+                valid: validate(val, prevState.controls.placeName.validationRules),
+                touched: true
+              }
+            }
+          };
+        });
+      };
 
     // placeAddedHandler method getting the placeName.
     // this.props.onPlaceAdded added from the prop in mapToDispatch
     placeAddedHandler = () => {
         // if the state of placeNamed trimmed is equal to an empty string
-        if (this.state.placeName.trim() !== "") {
-            this.props.onAddPlace(this.state.placeName);
+        if (this.state.controls.placeName.value.trim() !== "") {
+            this.props.onAddPlace(this.state.controls.placeName.value);
             // Dispatch (adds from button click)
         }
     }
@@ -67,9 +86,14 @@ class SharePlaceScreen extends Component {
                     <MainText><HeadingText>Share a Place with us!</HeadingText></MainText>
                     <PickImage />
                     <PickLocation />
-                    <PlaceInput placeName={this.state.placeName} onChangeText={this.placeNameChangedHandler} />
+                    <PlaceInput 
+                        placeData={this.state.controls.placeName} 
+                        onChangeText={this.placeNameChangedHandler} />
                     <View style={styles.button}>
-                        <Button title="Share the Place!" onPress={this.placeAddedHandler} />
+                        <Button 
+                            title="Share the Place!" 
+                            onPress={this.placeAddedHandler}
+                            disabled={!this.state.controls.placeName.valid} />
                     </View>
                 </View>
             </ScrollView>

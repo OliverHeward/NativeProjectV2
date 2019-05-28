@@ -20,11 +20,18 @@ const validate = (val, rules, connectedValue) => {
                 // if Confirm Pass is equalTo isValid (true)
                 isValid = isValid && equalToValidator(val, connectedValue[rule]);
                 break;
+            case 'notEmpty':
+                isValid = isValid && notEmptyValidator(val);
+                break;
             default:
                 isValid = true;
         }
     }
     return isValid;
+}
+
+const notEmptyValidator = val => {
+    return val.trim() !== ""
 }
 
 const emailValidator = val => {

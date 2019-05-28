@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Image, Button, StyleSheet } from 'react-native';
-import imagePlaceholder from '../../assets/unsplash.jpg';
+import imagePlaceholder from '../../assets/wework-office.jpg';
 
 class PickImage extends Component {
     render() {

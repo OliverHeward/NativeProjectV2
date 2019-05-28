@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Button, TextInput, StyleSheet, ImageBackground, Dimensions } from 'react-native';
+import { View, Text, Button, TextInput, StyleSheet, ImageBackground, Dimensions, KeyboardAvoidingView, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
 
 import startMainTabs from '../MainTabs/startMainTabs';
@@ -181,6 +181,8 @@ class AuthScreen extends Component {
                         onChangeText={(val) => this.updateInputState('confirmPassword', val)}
                         valid={this.state.controls.confirmPassword.valid}
                         touched={this.state.controls.confirmPassword.touched}
+                        secureTextEntry
+                        // secureTextEntry is a boolean so leaving it empty will return True
                      />
                 </View>
             );
@@ -189,59 +191,71 @@ class AuthScreen extends Component {
             <ImageBackground 
                 source={backgroundImage} 
                 style={styles.backgroundImage}>
-                <View style={styles.container} >
+                <KeyboardAvoidingView 
+                    style={styles.container}
+                    behavior="padding" >
                     {headingText}
                 <ButtonWithBackground 
                     onPress={this.switchAuthModeHandler}>Switch To {this.state.authMode === 'login' ? "Sign Up" : "Login"}</ButtonWithBackground>
-                <View style={styles.inputContainer}>
-                    {/* value set to this state -> controls -> email -> value 
-                        onChangeText listening for any change in the input,
-                            When there is val is ran into function updateInputState
-                            which will update state of 'email' value
-                        
-                            valid is a validity check for the input, along with touched.
-                            If the field is invalid when checked against Regex
-                            it will style to be RED
-                    */}
-                    <DefaultInput 
-                        placeholder="Your E-Mail Address" 
-                        style={styles.input} 
-                        value={this.state.controls.email.value}
-                        onChangeText={(val) => this.updateInputState('email', val)} 
-                        valid={this.state.controls.email.valid}
-                        touched={this.state.controls.email.touched}
-                        />
-                    {/* styles is now determined by if viewMode is "portrait" OR "login"  */}
-                    <View style={
-                        this.state.viewMode === "portrait" || 
-                        this.state.authMode === "login"
-                            ? styles.portraitPasswordContainer 
-                            : styles.landscapePasswordContainer
-                        }>
-                        <View style={
-                            this.state.viewMode === "portrait" ||
-                            this.state.authMode === "login"
-                            ? styles.portraitPasswordWrapper 
-                            : styles.landscapePasswordWrapper
-                            }>
-                                {/* Valid & Touched are used for validity to apply styling
-                                        if the field is incorrect it will appear RED
-                                        the validity check is from Password === ConfirmPassword,
-                                        if FALSE the ConfirmPassword field will appear RED until TRUE    
-                                */}
+                    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                        <View style={styles.inputContainer}>
+                            {/* value set to this state -> controls -> email -> value 
+                                onChangeText listening for any change in the input,
+                                    When there is val is ran into function updateInputState
+                                    which will update state of 'email' value
+                                
+                                    valid is a validity check for the input, along with touched.
+                                    If the field is invalid when checked against Regex
+                                    it will style to be RED
+                            */}
                             <DefaultInput 
-                                placeholder="Password" 
+                                placeholder="Your E-Mail Address" 
                                 style={styles.input} 
-                                value={this.state.controls.password.value}
-                                onChangeText={(val) => this.updateInputState('password', val)}
-                                valid={this.state.controls.password.valid}
-                                touched={this.state.controls.password.touched} />
-                        </View>
+                                value={this.state.controls.email.value}
+                                onChangeText={(val) => this.updateInputState('email', val)} 
+                                valid={this.state.controls.email.valid}
+                                touched={this.state.controls.email.touched}
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                // Auto's set to False to prevent annoying behavior
+                                keyboardType="email-address"
+                                // Setting Keyboard to Email to make for friendlier typing
+                                />
+                            {/* styles is now determined by if viewMode is "portrait" OR "login"  */}
+                            <View style={
+                                this.state.viewMode === "portrait" || 
+                                this.state.authMode === "login"
+                                    ? styles.portraitPasswordContainer 
+                                    : styles.landscapePasswordContainer
+                                }>
+                                <View style={
+                                    this.state.viewMode === "portrait" ||
+                                    this.state.authMode === "login"
+                                    ? styles.portraitPasswordWrapper 
+                                    : styles.landscapePasswordWrapper
+                                    }>
+                                        {/* Valid & Touched are used for validity to apply styling
+                                                if the field is incorrect it will appear RED
+                                                the validity check is from Password === ConfirmPassword,
+                                                if FALSE the ConfirmPassword field will appear RED until TRUE    
+                                        */}
+                                    <DefaultInput 
+                                        placeholder="Password" 
+                                        style={styles.input} 
+                                        value={this.state.controls.password.value}
+                                        onChangeText={(val) => this.updateInputState('password', val)}
+                                        valid={this.state.controls.password.valid}
+                                        touched={this.state.controls.password.touched}
+                                        secureTextEntry
+                                        // secureTextEntry is a boolean so leaving it empty will return True
+                                        />
+                                </View>
 
-                        {/* confirmPasswordControl displays confirmPassword field when in "SignUp" authMode */}
-                        {confirmPasswordControl}
-                    </View>
-                </View>
+                                {/* confirmPasswordControl displays confirmPassword field when in "SignUp" authMode */}
+                                {confirmPasswordControl}
+                            </View>
+                        </View>
+                </TouchableWithoutFeedback>
                 {/* disabled is passed through, to check whether the validity of all fields is true
                     ! = NOT, so if each state is NOT .valid, it will set itself to Disabled
                         which takes away the Touchable component from ButtonWithBackground.js (UI)
@@ -258,7 +272,7 @@ class AuthScreen extends Component {
                         !this.state.controls.password.valid
                         }
                         >Submit</ButtonWithBackground>
-            </View>
+            </KeyboardAvoidingView>
             </ImageBackground>
         );
     }
@@ -298,6 +312,7 @@ const styles = StyleSheet.create({
     },
 });
 
+// Dispatching props value of authData to Redux
 const mapDispatchToProps = dispatch => {
     return {
         onLogin: (authData) => dispatch(tryAuth(authData))
