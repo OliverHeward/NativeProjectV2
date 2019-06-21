@@ -9,19 +9,30 @@ export const addPlace = (placeName, location, image) => {
             name: placeName,
             location: location
         };
-        // Fetch API POST to FireBase
-        fetch("https://my-project-1559060339539.firebaseio.com/places.json", {
+        fetch('https://us-central1-my-project-1559060339539.cloudfunctions.net/storeImage', {
             method: 'POST',
-            body: JSON.stringify(placeData)
+            body: JSON.stringify({
+                image: image.base64
+            })
         })
-        // Catch Error
         .catch(err => console.log(err))
-        // Success send response in JSON
         .then(res => res.json())
-        // log the parsed Response
         .then(parsedRes => {
             console.log(parsedRes);
         });
+        // Fetch API POST to FireBase
+        // fetch("https://my-project-1559060339539.firebaseio.com/places.json", {
+        //     method: 'POST',
+        //     body: JSON.stringify(placeData)
+        // })
+        // // Catch Error
+        // .catch(err => console.log(err))
+        // // Success send response in JSON
+        // .then(res => res.json())
+        // // log the parsed Response
+        // .then(parsedRes => {
+        //     console.log(parsedRes);
+        // });
     };
 };
 
