@@ -30,6 +30,14 @@ class SharePlaceScreen extends Component {
             validationRules: {
               notEmpty: true
             }
+          },
+          location: {
+              value: null,
+              valid: false
+          },
+          image: {
+              value: null,
+              valid: false
           }
         }
       };
@@ -69,14 +77,42 @@ class SharePlaceScreen extends Component {
         });
       };
 
+    locationPickedHandler = location => {
+        this.setState(prevState => {
+            return {
+                controls: {
+                    ...prevState.controls,
+                    location: {
+                        value: location,
+                        valid: true
+                    }
+                }
+            }
+        })
+    }
+
+    imagePickedHandler = image => {
+        this.setState(prevState => {
+            return {
+                controls: {
+                    ...prevState.controls,
+                    image: {
+                        value: image,
+                        valid: true
+                    }
+                }
+            }
+        })
+    }
+
     // placeAddedHandler method getting the placeName.
     // this.props.onPlaceAdded added from the prop in mapToDispatch
     placeAddedHandler = () => {
         // if the state of placeNamed trimmed is equal to an empty string
-        if (this.state.controls.placeName.value.trim() !== "") {
-            this.props.onAddPlace(this.state.controls.placeName.value);
+            this.props.onAddPlace(this.state.controls.placeName.value, 
+                                this.state.controls.location.value,
+                                this.state.controls.image.value);
             // Dispatch (adds from button click)
-        }
     }
 
     render () {
@@ -84,8 +120,8 @@ class SharePlaceScreen extends Component {
             <ScrollView>
                 <View style={styles.container}>
                     <MainText><HeadingText>Share a Place with us!</HeadingText></MainText>
-                    <PickImage />
-                    <PickLocation />
+                    <PickImage onImagePicked={this.imagePickedHandler}/>
+                    <PickLocation onLocationPick={this.locationPickedHandler} />
                     <PlaceInput 
                         placeData={this.state.controls.placeName} 
                         onChangeText={this.placeNameChangedHandler} />
@@ -93,7 +129,10 @@ class SharePlaceScreen extends Component {
                         <Button 
                             title="Share the Place!" 
                             onPress={this.placeAddedHandler}
-                            disabled={!this.state.controls.placeName.valid} />
+                            disabled={
+                                !this.state.controls.placeName.valid || 
+                                !this.state.controls.location.valid ||
+                                !this.state.controls.image.valid} />
                     </View>
                 </View>
             </ScrollView>
@@ -116,7 +155,7 @@ const styles = StyleSheet.create({
 const mapDispatchToProps = dispatch => {
     // mapping dispatch allows for the passing of state to store
     return {
-        onAddPlace: (placeName) => dispatch(addPlace(placeName))
+        onAddPlace: (placeName, location, image) => dispatch(addPlace(placeName, location, image))
         // the action onAddPlace is returned, placeName is being imported from PlaceInput as the value's state
         // the state is then dispatched the result of addPlace with the value of placeName
         // this is then sent to the store as a new place

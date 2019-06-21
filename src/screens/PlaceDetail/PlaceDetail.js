@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Image, Text, Button, StyleSheet, TouchableOpacity, Platform, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
+import MapView from 'react-native-maps';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 import { deletePlace } from '../../store/actions/index';
@@ -41,34 +42,49 @@ class PlaceDetail extends Component {
 
     render() {
         return(
-        <View style={styles.container}>
+        <View style={[
+            styles.container,
+            this.state.viewMode === "portrait" 
+            ? styles.portraitContainer 
+            : styles.landscapeContainer
+            ]}>
             {/* Styles for Components styling being controlled by Dimensions API  */}
-            <View style={
-                this.state.viewMode === "portrait" 
-                ? styles.portraitImageContainer 
-                : styles.landscapeImageContainer
-            }>
-                <Image 
-                source={this.props.selectedPlace.image} 
-                style={this.state.viewMode === "portrait" 
-                    ? styles.portraitPlaceImage 
-                    : styles.landscapePlaceImage}
-                />
-                {/* placeDeletedHandler function passed into onPress listener */}
-                <View style={
-                    this.state.viewMode === "portrait"
-                    ? styles.portraitTextContainer
-                    : styles.landscapeTextContainer
-                }>
+            <View style={styles.placeDetailContainer}>
+                <View style={styles.subContainer}>
+                    <Image 
+                    source={this.props.selectedPlace.image} 
+                    style={this.state.viewMode === "portrait" 
+                        ? styles.portraitPlaceImage 
+                        : styles.landscapePlaceImage}
+                    />
+                </View>
+                <View style={styles.subContainer}>
+                    <MapView initialRegion={{
+                            ...this.props.selectedPlace.location,
+                            latitudeDelta: 0.0122,
+                            longitudeDelta: Dimensions.get("window").width / 
+                                            Dimensions.get("window").height * 
+                                            0.0122
+                        }}
+                        style={styles.map}>
+                        <MapView.Marker coordinate={this.props.selectedPlace.location}/>
+                    </MapView>
+                </View>
+            </View>
+            {/* placeDeletedHandler function passed into onPress listener */}
+            <View style={styles.subContainer}>
+                <View>
                     <Text style={styles.placeName}>{this.props.selectedPlace.name}</Text>
-                        <TouchableOpacity onPress={this.placeDeletedHandler}>
-                            <View style={styles.deleteButton}>
-                                <Icon 
-                                size={30} 
-                                // Platform checking for device to change icon styling accordingly
-                                name={Platform.OS === 'android' ? "md-trash" : "ios-trash"}
-                                color="red" />
-                            </View>
+                </View>
+                <View>
+                    <TouchableOpacity onPress={this.placeDeletedHandler}>
+                        <View style={styles.deleteButton}>
+                        <Icon 
+                            size={30} 
+                            // Platform checking for device to change icon styling accordingly
+                            name={Platform.OS === 'android' ? "md-trash" : "ios-trash"}
+                            color="red" />
+                        </View>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -79,7 +95,20 @@ class PlaceDetail extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 40
+        margin: 22,
+        flex: 1
+    }, 
+    portraitContainer: {
+        flexDirection: "column"
+    },
+    landscapeContainer: {
+        flexDirection: "row"
+    },
+    subContainer: {
+        flex: 1
+    },
+    mapContainer: {
+        width: "100%",
     },
     placeName: {
         fontWeight: "bold",
@@ -89,25 +118,34 @@ const styles = StyleSheet.create({
     deleteButton: {
         alignItems: "center",
     },
+    map: {
+        ...StyleSheet.absoluteFillObject
+    },
+    placeDetailContainer: {
+        flex: 2
+    },
     // Responsive Styles
     portraitImageContainer: {
         flexDirection: "column",
+        width: "100%",
     },
     landscapeImageContainer: {
         flexDirection: "row",
         alignItems: "center",
-        justifyContent: "center"
+        justifyContent: "center",
+        width: "45%",
+        marginLeft: "5%"
     },
     portraitPlaceImage: {
         width: "100%",
         height: 200
     },
     landscapePlaceImage: {
-        width: "45%",
-        height: 200,
+        width: "100%",
+        height: "100%"
     },
     portraitTextContainer: {
-        width: "100%",
+        width: "50%",
     },
     landscapeTextContainer: {
         width: "45%",
