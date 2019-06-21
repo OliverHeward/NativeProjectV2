@@ -14,7 +14,6 @@ import PickImage from '../../components/PickImage/PickImage';
 import PickLocation from '../../components/PickLocation/PickLocation';
 import validate from '../../utility/validation';
 // Importing Image
-import imagePlaceholder from '../../assets/wework-office.jpg';
 
 class SharePlaceScreen extends Component {
     static navigatorStyle = {

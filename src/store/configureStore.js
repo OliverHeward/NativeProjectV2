@@ -1,5 +1,5 @@
 import { createStore, combineReducers, compose, applyMiddleware } from 'redux';
-
+import thunk from 'redux-thunk';
 import placesReducer from './reducers/places';
 
 const rootReducer = combineReducers({
@@ -14,7 +14,8 @@ if (__DEV__) {
 }
 
 const configureStore = () => {
-    return createStore(rootReducer, composeEnchancers());
+    // Thunk passed into applyMiddleware to catch data to send to Firebase
+    return createStore(rootReducer, composeEnchancers(applyMiddleware(thunk)));
 };
 
 export default configureStore;
