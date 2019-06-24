@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 
 import PlaceList from "../../components/PlaceList/PlaceList";
 // Importing Placelist
+import { getPlaces } from '../../store/actions/index';
 
 class FindPlaceScreen extends Component {
     // a static state color is set for navbar to orange
@@ -23,6 +24,10 @@ class FindPlaceScreen extends Component {
         super(props);
         // setting the navigator to open by passing onNavigatorEvent function into navigator props
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent);
+    }
+
+    componentDidMount() {
+        this.props.onLoadPlaces();
     }
 
     onNavigatorEvent = event => {
@@ -126,6 +131,7 @@ class FindPlaceScreen extends Component {
                         onItemSelected={this.itemSelectedHandler} 
                 />
                 </Animated.View>
+                
             );
         }
         return(
@@ -166,4 +172,10 @@ const mapStateToProps = state => {
     };
 };
 
-export default connect(mapStateToProps)(FindPlaceScreen);
+const mapDispatchToProps = dispatch => {
+    return {
+        onLoadPlaces: () => dispatch(getPlaces())
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(FindPlaceScreen);

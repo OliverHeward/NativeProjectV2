@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, ScrollView, Image } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, ScrollView, Image, ActivityIndicator } from 'react-native';
 // Importing Redux
 import { connect } from 'react-redux';
 // Importing action Index
@@ -115,6 +115,20 @@ class SharePlaceScreen extends Component {
     }
 
     render () {
+        let submitButton = (
+            <Button 
+                title="Share the Place!" 
+                onPress={this.placeAddedHandler}
+                disabled={
+                    !this.state.controls.placeName.valid || 
+                    !this.state.controls.location.valid ||
+                    !this.state.controls.image.valid} />
+        );
+
+        if (this.props.isLoading) {
+            submitButton = <ActivityIndicator />;
+        } 
+
         return(
             <ScrollView>
                 <View style={styles.container}>
@@ -123,15 +137,10 @@ class SharePlaceScreen extends Component {
                     <PickLocation onLocationPick={this.locationPickedHandler} />
                     <PlaceInput 
                         placeData={this.state.controls.placeName} 
-                        onChangeText={this.placeNameChangedHandler} />
+                        onChangeText={this.placeNameChangedHandler}
+                        />
                     <View style={styles.button}>
-                        <Button 
-                            title="Share the Place!" 
-                            onPress={this.placeAddedHandler}
-                            disabled={
-                                !this.state.controls.placeName.valid || 
-                                !this.state.controls.location.valid ||
-                                !this.state.controls.image.valid} />
+                        {submitButton}
                     </View>
                 </View>
             </ScrollView>
@@ -151,6 +160,12 @@ const styles = StyleSheet.create({
     },
 })
 
+const mapStateToProps = state => {
+    return {
+        isLoading: state.ui.isLoading
+    };
+};
+
 const mapDispatchToProps = dispatch => {
     // mapping dispatch allows for the passing of state to store
     return {
@@ -161,4 +176,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(null, mapDispatchToProps)(SharePlaceScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(SharePlaceScreen);

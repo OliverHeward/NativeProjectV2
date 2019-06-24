@@ -92,11 +92,13 @@ class PickLocation extends Component {
 const styles = StyleSheet.create({
     container: {
         width: "100%",
-        alignItems: "center"
+        alignItems: "center",
     },
     map: {
-        width: "100%",
+        width: "80%",
         height: 250,
+        borderWidth: 1,
+        borderColor: "#000"
     },
     button: {
         margin: 8

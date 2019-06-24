@@ -1,6 +1,6 @@
 import {
-    ADD_PLACE,
-    DELETE_PLACE
+  SET_PLACES,
+  REMOVE_PLACE
   } from "../actions/actionTypes";
   
   // Creating an empty places object
@@ -11,26 +11,16 @@ import {
   const reducer = (state = initialState, action) => {
     // Action Switch statement
     switch (action.type) {
-      // Case for Adding place
-      case ADD_PLACE:
+      case SET_PLACES: 
         return {
-          // bundling state with places, key, name and image
           ...state,
-          places: state.places.concat({
-            key: Math.random(),
-            name: action.placeName,
-            image: {
-              uri: action.image.uri
-            },
-            location: action.location
-          })
+          places: action.places
         };
-        // Case for Deleting place
-      case DELETE_PLACE:
+      case REMOVE_PLACE: 
         return {
           ...state,
           places: state.places.filter(place => {
-            return place.key !== action.placeKey;
+            return place.key !== action.key;
             // action.placeKey is passed down from actions-places
           })
         };

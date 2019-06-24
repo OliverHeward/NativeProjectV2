@@ -21,10 +21,10 @@ const styles = StyleSheet.create({
     input: {
         width: "100%",
         borderWidth: 1,
-        borderColor: "#eee",
+        borderColor: "#000",
         padding: 5,
         marginTop: 10,
-        marginBottom: 10
+        marginBottom: 10,
     },
     // Invalid entry style
     invalid: {
