@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, StyleSheet } from 'react-native';
 
+// Creating Base Text for MAIN TEXT
 const mainText = props => (
     <Text style={styles.mainText}>
         {props.children}
@@ -15,3 +16,4 @@ const styles = StyleSheet.create({
 });
 
 export default mainText;
+// Exporting Main Text as a custom component

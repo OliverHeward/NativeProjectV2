@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
-import { View, Image, Text, Button, StyleSheet, TouchableOpacity, Platform, Dimensions } from 'react-native';
+import { View, Image, Text, StyleSheet, TouchableOpacity, Platform, Dimensions } from 'react-native';
+// Importing Components. Platform and Dimenions API from React-Native 
 import { connect } from 'react-redux';
 import MapView from 'react-native-maps';
+// Importing Maps from React-Native-Maps
 
 import Icon from 'react-native-vector-icons/Ionicons';
+// Importing Icons from Ionicons Vector Node Package
 import { deletePlace } from '../../store/actions/index';
+// Import Delete place from 
 
 class PlaceDetail extends Component {
+    // Controlling initial load state of viewMode based on Dimensions API response
     state = {
         viewMode: Dimensions.get('window').height > 500 ? "portrait" : "landscape"
     }
@@ -33,6 +38,7 @@ class PlaceDetail extends Component {
         })
     }
 
+    // Place Deleted Function Handler
     placeDeletedHandler = () => {
         // Grabbing generated Key for item
         this.props.onDeletePlace(this.props.selectedPlace.key);

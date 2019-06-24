@@ -1,9 +1,5 @@
 import React from 'react';
-import { TouchableOpacity,
-         Text, 
-         View, 
-         StyleSheet,
-        Platform } from 'react-native';
+import { TouchableOpacity, Text, View, StyleSheet, Platform } from 'react-native';
 
 
 const buttonWithBackground = props => {

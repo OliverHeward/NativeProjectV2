@@ -26,6 +26,7 @@ class FindPlaceScreen extends Component {
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent);
     }
 
+    // If ComponontMounts then load props of places
     componentDidMount() {
         this.props.onLoadPlaces();
     }
@@ -49,7 +50,6 @@ class FindPlaceScreen extends Component {
             start() animation.
 
     */
-
     placesLoadedHandler = () => {
         Animated.timing(this.state.placesAnim, {
             toValue: 1,

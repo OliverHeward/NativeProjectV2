@@ -2,7 +2,7 @@ import { Navigation } from 'react-native-navigation';
 import { Platform } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-
+// Start Tabs Function
 const startTabs = () => {
     // Promise waits for Icon's to be loaded/resolved, a .then is used which will turn them into an array.
     Promise.all([

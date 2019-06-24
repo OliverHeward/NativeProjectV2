@@ -45,6 +45,9 @@ class PickLocation extends Component {
         });
     };
 
+    /* Get Location Function using Navigator that is built into Native Maps
+        Geolocation.getCurrentPosition is a built in function of the API that allows to get..    
+    */
     getLocationHandler = () => {
         navigator.geolocation.getCurrentPosition(pos => {
             const coordsEvent = {

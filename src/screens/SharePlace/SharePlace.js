@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, ScrollView, Image, ActivityIndicator } from 'react-native';
+import { View, Button, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 // Importing Redux
 import { connect } from 'react-redux';
 // Importing action Index
@@ -11,9 +11,11 @@ import MainText from '../../components/UI/MainText/MainText';
 import HeadingText from '../../components/UI/HeadingText/HeadingText';
 // Importing PickImage and PickLocation components
 import PickImage from '../../components/PickImage/PickImage';
+// Importing the Pick Image Component
 import PickLocation from '../../components/PickLocation/PickLocation';
+// Importing Pick Location Component
 import validate from '../../utility/validation';
-// Importing Image
+// Importing Validation of Share Place Components
 
 class SharePlaceScreen extends Component {
     static navigatorStyle = {
@@ -61,6 +63,7 @@ class SharePlaceScreen extends Component {
     };
     // Setting state of PlaceInput
     placeNameChangedHandler = val => {
+        // setState pulling Previous State as to not reset previously set states
         this.setState(prevState => {
           return {
             controls: {
@@ -70,13 +73,16 @@ class SharePlaceScreen extends Component {
                 value: val,
                 valid: validate(val, prevState.controls.placeName.validationRules),
                 touched: true
+                // Updating State of Place Name - Value, Valid and Touched
               }
             }
           };
         });
       };
 
+    // Location Picked Function
     locationPickedHandler = location => {
+        // Setting State to previous state as to not overwrite previous state
         this.setState(prevState => {
             return {
                 controls: {
@@ -84,13 +90,16 @@ class SharePlaceScreen extends Component {
                     location: {
                         value: location,
                         valid: true
+                        // Updating state of Location - Value and Valid
                     }
                 }
             }
         })
     }
 
+    // Image Picked Function
     imagePickedHandler = image => {
+        // Setting State to previous state as to not overwrite previous state
         this.setState(prevState => {
             return {
                 controls: {
@@ -98,6 +107,7 @@ class SharePlaceScreen extends Component {
                     image: {
                         value: image,
                         valid: true
+                        // Updating state of Image - Value and Valid.
                     }
                 }
             }
@@ -115,6 +125,7 @@ class SharePlaceScreen extends Component {
     }
 
     render () {
+        // Button added to object
         let submitButton = (
             <Button 
                 title="Share the Place!" 
@@ -124,7 +135,9 @@ class SharePlaceScreen extends Component {
                     !this.state.controls.location.valid ||
                     !this.state.controls.image.valid} />
         );
-
+        
+        /* If button click is successful and upload has began,
+            Change button to Activity Indicator (loading circle) */
         if (this.props.isLoading) {
             submitButton = <ActivityIndicator />;
         } 
@@ -160,9 +173,11 @@ const styles = StyleSheet.create({
     },
 })
 
+// Sending State to Redux
 const mapStateToProps = state => {
     return {
         isLoading: state.ui.isLoading
+        // Return loading state to state.ui.isLoading
     };
 };
 

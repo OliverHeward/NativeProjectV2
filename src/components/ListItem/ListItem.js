@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 
+// Creating custom component ListItem
 const listItem = props => (
     <TouchableOpacity onPress={props.onItemPressed}>
         <View style={styles.listItem}>
@@ -27,3 +28,4 @@ const styles = StyleSheet.create({
 });
 
 export default listItem;
+// Exporting Custom ListItem Component

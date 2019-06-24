@@ -1,5 +1,7 @@
 import { SET_PLACES, REMOVE_PLACE } from './actionTypes';
+// Importing Set Places and Remove Place from Redux
 import { uiStartLoading, uiStopLoading } from './index';
+// Import Loading Circle and Stop loading circle function
 
 // Running placeName through addplace function
 export const addPlace = (placeName, location, image) => {
@@ -47,6 +49,7 @@ export const addPlace = (placeName, location, image) => {
     };
 };
 
+// Get Places export fetching content from google cloud
 export const getPlaces = () => {
     return dispatch => {
         fetch("https://my-project-1559060339539.firebaseio.com/places.json")
@@ -55,6 +58,8 @@ export const getPlaces = () => {
             console.log(err);
         })
         .then(res => res.json())
+        /* FOR loop that iterates through each key in parsedRes on google database and pushes each place into an array of 'places' whilst grabbing base64 image from Storage 
+        */
         .then(parsedRes => {
             const places = [];
             for (let key in parsedRes) {
@@ -67,11 +72,14 @@ export const getPlaces = () => {
                 });
             }
             dispatch(setPlaces(places));
+            // Dispatch results to setPlaces
         });
     }
 };
 
+// Export for Deleting a Place
 export const deletePlace = key => {
+    // Return the Key with Fetch and DELETE
     return dispatch => {
         dispatch(removePlace(key));
         fetch("https://my-project-1559060339539.firebaseio.com/places/" + key + ".json", {
@@ -88,6 +96,7 @@ export const deletePlace = key => {
     };
 };
 
+// Remove place from Local Redux Store
 export const removePlace = key => {
     return {
         type: REMOVE_PLACE,
@@ -95,6 +104,7 @@ export const removePlace = key => {
     }
 }
 
+// Set places of Local Redux Store 
 export const setPlaces = places => {
     return {
         type: SET_PLACES,

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, StyleSheet } from 'react-native';
 
+// Creating custom Heading Text function
 const headingText = props => (
     <Text {...props} style={[styles.textHeading, props.style]}>
         {props.children}
@@ -15,3 +16,4 @@ const styles = StyleSheet.create({
 })
 
 export default headingText;
+// Exporting Custom Heading Text Component

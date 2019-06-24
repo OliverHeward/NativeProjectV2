@@ -1,5 +1,6 @@
 import { createStore, combineReducers, compose, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
+// Importing Redux Thunk to allow for Middlewear to catch data to send to Firebase
 import placesReducer from './reducers/places';
 import uiReducer from './reducers/ui';
 
