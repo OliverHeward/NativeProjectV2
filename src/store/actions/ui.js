@@ -10,5 +10,5 @@ export const uiStartLoading = () => {
 export const uiStopLoading = () => {
     return {
         type: UI_STOP_LOADING
-    }
-}
+    };
+};

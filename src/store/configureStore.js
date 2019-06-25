@@ -3,10 +3,12 @@ import thunk from 'redux-thunk';
 // Importing Redux Thunk to allow for Middlewear to catch data to send to Firebase
 import placesReducer from './reducers/places';
 import uiReducer from './reducers/ui';
+import authReducer from './reducers/auth';
 
 const rootReducer = combineReducers({
     places: placesReducer,
-    ui: uiReducer 
+    ui: uiReducer, 
+    auth: authReducer
 });
 
 let composeEnchancers = compose;

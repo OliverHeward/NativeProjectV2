@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, ImageBackground, Dimensions, KeyboardAvoidingView, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { View, StyleSheet, ImageBackground, Dimensions, KeyboardAvoidingView, Keyboard, TouchableWithoutFeedback, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
-
-import startMainTabs from '../MainTabs/startMainTabs';
 import DefaultInput from '../../components/UI/DefaultInput/DefaultInput';
 import HeadingText from '../../components/UI/HeadingText/HeadingText';
 import MainText from '../../components/UI/MainText/MainText';
@@ -141,19 +139,37 @@ class AuthScreen extends Component {
 
     /* LoginHandler assignes authData the state values from Email & Password
         then assigns the auth data to onLogin props */
-    loginHandler = () => {
+    authHandler = () => {
         const authData = {
             email: this.state.controls.email.value,
             password: this.state.controls.password.value
         };
-        this.props.onLogin(authData);
-        startMainTabs();
+        this.props.onTryAuth(authData, this.state.authMode);
+        
     };
 
     render () {
         // Setting headingText variable to null
         let headingText = null;
         let confirmPasswordControl = null;
+        {/* disabled is passed through, to check whether the validity of all fields is true
+        ! = NOT, so if each state is NOT .valid, it will set itself to Disabled
+        which takes away the Touchable component from ButtonWithBackground.js (UI)
+        */}
+        let submitButton = (
+            <ButtonWithBackground 
+                onPress={this.authHandler}
+                disabled={
+                /* Effectively, we want this button to be disabled until everything is valid. 
+                but login doesn't contain confirmPassword, so confirmPass is chained with authMode sign up.
+                thus eliminating it from the check when in "Login"
+                */
+                !this.state.controls.confirmPassword.valid && this.state.authMode === "signup" || 
+                !this.state.controls.email.valid || 
+                !this.state.controls.password.valid
+                }
+            >Submit</ButtonWithBackground>
+        )
         /* If the current state of viewMode run by the EventListener is equal to "portrait"
             update headingText with this JSX
         */ 
@@ -186,6 +202,9 @@ class AuthScreen extends Component {
                      />
                 </View>
             );
+        }
+        if (this.props.isLoading) {
+            submitButton = <ActivityIndicator/>
         }
         return(
             <ImageBackground 
@@ -256,22 +275,7 @@ class AuthScreen extends Component {
                             </View>
                         </View>
                 </TouchableWithoutFeedback>
-                {/* disabled is passed through, to check whether the validity of all fields is true
-                    ! = NOT, so if each state is NOT .valid, it will set itself to Disabled
-                        which takes away the Touchable component from ButtonWithBackground.js (UI)
-                */}
-                <ButtonWithBackground 
-                    onPress={this.loginHandler}
-                    disabled={
-                        /* Effectively, we want this button to be disabled until everything is valid. 
-                            but login doesn't contain confirmPassword, so confirmPass is chained with authMode sign up.
-                            thus eliminating it from the check when in "Login"
-                        */
-                        !this.state.controls.confirmPassword.valid && this.state.authMode === "signup" || 
-                        !this.state.controls.email.valid || 
-                        !this.state.controls.password.valid
-                        }
-                        >Submit</ButtonWithBackground>
+                {submitButton}
             </KeyboardAvoidingView>
             </ImageBackground>
         );
@@ -312,11 +316,17 @@ const styles = StyleSheet.create({
     },
 });
 
-// Dispatching props value of authData to Redux
-const mapDispatchToProps = dispatch => {
+const mapStateToProps = state => {
     return {
-        onLogin: (authData) => dispatch(tryAuth(authData))
+        isLoading: state.ui.isLoading
     };
 };
 
-export default connect(null, mapDispatchToProps)(AuthScreen);
+// Dispatching props value of authData to Redux
+const mapDispatchToProps = dispatch => {
+    return {
+        onTryAuth: (authData, authMode) => dispatch(tryAuth(authData, authMode))
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AuthScreen);
