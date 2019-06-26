@@ -15,7 +15,7 @@ export const addPlace = (placeName, location, image) => {
         })
         .then(token => {
             authToken = token;
-            return fetch('https://us-central1-my-project-1559060339539.cloudfunctions.net/storeImage', {
+            return fetch("https://us-central1-my-project-1559060339539.cloudfunctions.net/storeImage", {
                 method: "POST",
                 body: JSON.stringify({
                     image: image.base64
@@ -40,8 +40,8 @@ export const addPlace = (placeName, location, image) => {
                 image: parsedRes.imageUrl
             };
             // Fetch API POST to FireBase
-            return fetch("https://my-project-1559060339539.firebaseio.com/places.json?auth=" + authToken , {
-                method: 'POST',
+            return fetch("https://my-project-1559060339539.firebaseio.com/places.json?auth=" + authToken, {
+                method: "POST",
                 body: JSON.stringify(placeData)
             });
         })
